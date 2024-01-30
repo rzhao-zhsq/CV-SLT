@@ -1,0 +1,146 @@
+task: S2T
+data:
+    input_data: videos
+    dataset_name: phoenix-2014t
+    input_streams:
+        - rgb
+
+    dev:   data/phoenix-2014t/phoenix-2014t_cleaned.dev
+    test:  data/phoenix-2014t/phoenix-2014t_cleaned.test
+    train: data/phoenix-2014t/phoenix-2014t_cleaned.train
+
+#    dev_head_rgb_input:   data/phoenix-2014t_s2g/extract_features/head_rgb_input/dev.pkl
+#    test_head_rgb_input:  data/phoenix-2014t_s2g/extract_features/head_rgb_input/test.pkl
+#    train_head_rgb_input: data/phoenix-2014t_s2g/extract_features/head_rgb_input/train.pkl
+
+    dev_head_rgb_input:   /home/rzhao/data/slt/tsn/SingleStream/phoenix-2014t_s2g/extract_features/head_rgb_input/dev.pkl
+    test_head_rgb_input:  /home/rzhao/data/slt/tsn/SingleStream/phoenix-2014t_s2g/extract_features/head_rgb_input/test.pkl
+    train_head_rgb_input: /home/rzhao/data/slt/tsn/SingleStream/phoenix-2014t_s2g/extract_features/head_rgb_input/train.pkl
+
+    level: word
+    max_sent_length: 400
+    txt_lowercase: true
+testing:
+    cfg:
+        recognition:
+            beam_size: 1
+        translation:
+            length_penalty: 1
+            max_length: 100
+            num_beams: 5
+training:
+    batch_size: 16
+    keep_last_ckpts: 2
+    model_dir: /home/rzhao/python/vtsnr/experiments/outputs/GridSearch/phoenix-2014t_vs2t_kl3_middle_dim64_residual_attention_1e-4_2e-3_1e-5_seed15*
+    num_workers: 4
+    amp: True
+    optimization:
+        betas:
+            - 0.9
+            - 0.998
+        learning_rate:
+            default: 1.0e-3
+            mapper: 1.0e-3
+            translation: 1.0e-05
+        optimizer: Adam
+        scheduler: cosineannealing
+        t_max: 40
+        weight_decay: 0.001
+    overwrite: true
+    random_seed: 17
+    shuffle: true
+    total_epoch: 40
+    validation:
+        cfg:
+            recognition:
+                beam_size: 1
+            translation:
+                length_penalty: 1
+                max_length: 100
+                num_beams: 5
+        freq: 1
+        unit: epoch
+        valid_start_step: 0
+        valid_start_epoch: 0
+model:
+    recognition_weight: 0.0
+    translation_weight: 1.0
+    RecognitionNetwork:
+        freeze: false
+        GlossTokenizer:
+            gloss2id_file: data/phoenix-2014t/gloss2ids_old.pkl
+        fuse_method: empty
+        s3d:
+            freeze_block: 1
+#            pretrained_ckpt: pretrained_models/s3ds_glosscls_ckpt
+            pretrained_ckpt: /home/rzhao/pretrained_models/slt/s3ds_glosscls_ckpt
+            use_block: 4
+        visual_head:
+#            pretrained_ckpt: pretrained_models/phoenix-2014t_s2g/ckpts/best.ckpt
+            pretrained_ckpt: /home/rzhao/python/tsn/experiments/official_ckpt/SingleStream/csl-daily_s2g/ckpts/best.ckpt
+            freeze: false
+            ff_kernelsize:
+                - 3
+                - 3
+            ff_size: 2048
+            hidden_size: 512
+            input_size: 832
+            pe: true
+
+    TranslationNetwork:
+        GlossEmbedding:
+            freeze: false
+#            gloss2embed_file: pretrained_models/mBart_de/gloss_embeddings.bin
+            gloss2embed_file: /home/rzhao/pretrained_models/slt/mBart_de/gloss_embeddings.bin
+        GlossTokenizer:
+#            gloss2id_file: pretrained_models/mBart_de/gloss2ids.pkl
+            gloss2id_file: /home/rzhao/pretrained_models/slt/mBart_de/gloss2ids.pkl
+            src_lang: de_DGS
+        TextTokenizer:
+#            pretrained_model_name_or_path: pretrained_models/mBart_de
+#            pruneids_file: pretrained_models/mBart_de/map_ids.pkl
+            pretrained_model_name_or_path: /home/rzhao/pretrained_models/slt/mBart_de
+            pruneids_file: /home/rzhao/pretrained_models/slt/mBart_de/map_ids.pkl
+            tgt_lang: de_DE
+        freeze_txt_embed: false
+        label_smoothing: 0.2
+        gls_eos: txt
+        overwrite_cfg:
+            attention_dropout: 0.1
+            dropout: 0.3
+        from_scratch: false
+        validation_cfg:
+            length_penalty: 1
+            max_length: 100
+            num_beams: 5
+#        pretrained_model_name_or_path: pretrained_models/mBart_de
+#        load_ckpt: pretrained_models/phoenix-2014t_g2t/ckpts/best.ckpt
+        pretrained_model_name_or_path: /home/rzhao/pretrained_models/slt/mBart_de
+        load_ckpt: /home/rzhao/python/tsn/experiments/outputs/SingleStream/phoenix-2014t_g2t_best/ckpts/best.ckpt
+
+
+    VLMapper:
+        freeze: false
+        type: projection
+        in_features: 512
+        multistream_fuse: empty
+
+    VariationalNetwork:
+        input_embed_dim: 1024
+        latent_dim: 64
+        attention_shared: True
+        norm: prefix
+
+        gkl_factor: 1.0
+        gkl_start_ratio: 0.0
+        gkl_warmup_start: 0
+        gkl_warmup_step: 4000
+
+        kl_factor: 3.0
+        kl_start_ratio: 0.0
+        kl_warmup_start: 0
+        kl_warmup_step: 4000
+
+
+
+
