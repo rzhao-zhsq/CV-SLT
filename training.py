@@ -150,7 +150,7 @@ def symlink_update(target, link_name):
 
 def main():
     parser = argparse.ArgumentParser("CV-SLT")
-    parser.add_argument("--config", default="configs/default.yaml", type=str,
+    parser.add_argument("--config", default="configs/phoenix-2014t_vs2t.yaml", type=str,
                         help="Training configuration file (yaml).")
     parser.add_argument("--wandb", action="store_true", help='turn on wandb')
 

@@ -1,8 +1,8 @@
 ## CV-SLT
 
-This repo holds codes of the paper: Conditional Variational Autoencoder for Sign Language Translation with Cross-Modal Alignment.
+This repo holds codes of the [paper](https://arxiv.org/abs/2312.15645): Conditional Variational Autoencoder for Sign Language Translation with Cross-Modal Alignment.
 
-The CV-SLT takes [MMTLB](https://arxiv.org/abs/2203.04287) as a strong baseline, many thanks for their great work!
+The CV-SLT builds upon the strong baseline [MMTLB](https://arxiv.org/abs/2203.04287), many thanks to their great work!
 
 ## Introduction
 
@@ -14,14 +14,14 @@ We propose CV-SLT to facilitate direct and sufficient cross-modal alignment betw
 
 | Dataset    | R (Dev) | B1    | B2    | B3    | B4    | R (Test) | B1    | B2    | B3    | B4    |
 | ---------- | ------- | ----- | ----- | ----- | ----- | -------- | ----- | ----- | ----- | ----- |
-| PHOENIX14T | 54.33   | 54.77 | 42.37 | 34.49 | 29.06 | 54.58    | 55.27 | 42.79 | 34.72 | 29.21 |
+| PHOENIX14T | 55.05   | 55.35 | 42.99 | 35.07 | 29.55 | 54.54    | 54.76 | 42.80 | 34.97 | 29.52 |
 | CSL-daily  | 56.36   | 58.05 | 44.73 | 35.14 | 28.24 | 57.06    | 58.29 | 45.15 | 35.77 | 28.94 |
 
 ## Implementation
 
-The implementation for the *prior path* and the *posterior path* (line 253) is given in  `./modeling/translation`
+- The implementation for the *prior path* and the *posterior path* is given in  `./modeling/translation`
 
-The Gaussian Network (line 44) equipped with ARGD (line 89) is given in `./modeling/gaussian_net`
+- The Gaussian Network equipped with ARGD is given in `./modeling/gaussian_net`
 
 ### Prerequisites 
 
@@ -37,10 +37,14 @@ The raw data are from:
 - [PHOENIX14T](https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX-2014-T/)
 - [CSL-daily](http://home.ustc.edu.cn/~zhouh156/dataset/csl-daily/)
 
-Please refer to the [implementation](https://github.com/FangyunWei/SLRT/blob/main/TwoStreamNetwork/docs/SingleStream-SLT.md) of MMTLB for detailed data preparation and pre-trained models, as CV-SLT simply focuses on the SLT training. Specifically, the required processed data and pre-trained models include:
+Please refer to the [implementation of MMTLB](https://github.com/FangyunWei/SLRT/blob/main/TwoStreamNetwork/docs/SingleStream-SLT.md)  for preparing the data and models, as CV-SLT simply focuses on the SLT training. Specifically, the required processed data and pre-trained models include:
 
-- Pre-extracted visual features for [PPHENIX14T](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EndgQUATcNRCj0pTKPNMA_kBxSE9iJSONqj1zq1kQAAn5g?e=BgbJCK) and [CSL-daily](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EjbL5fTAZbxOmGA5x7px8s8BbyJ4ml5e5TROB-GEWPXeBQ?e=Ks7GfH). Please download and place them under `./data`
-- Pre-trained Visual Embedding and mBart [modules]([SingleStream - OneDrive (sharepoint.com)](https://hkustconnect-my.sharepoint.com/personal/rzuo_connect_ust_hk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Frzuo_connect_ust_hk%2FDocuments%2Fckpts%2FTwoStreamSLT%2FSingleStream&ga=1)). Please download the corresponding directories and place it under `./pretrained_models`
+- Pre-extracted visual features for [PPHENIX14T](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EndgQUATcNRCj0pTKPNMA_kBxSE9iJSONqj1zq1kQAAn5g?e=BgbJCK) and [CSL-daily](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EjbL5fTAZbxOmGA5x7px8s8BbyJ4ml5e5TROB-GEWPXeBQ?e=Ks7GfH). Please download and place them under `./experiment`
+- Pre-trained Visual Embedding (trained on s2g task) and mBart modules (trained on g2t task) following [MMTLB](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EuJlnAhX7h9NnvFZhQH-_fcBtV8lbnj2CphiuidhhcU69w?e=eOsQ4B). Please download the corresponding directories and place them under `./pretrained_models` 
+
+> Note that the path is configured in the \*.yaml file and you can change it anywhere you want.
+>
+> We backup the ckpts used in this repo [here](). #TODO
 
 ### Train and Evaluate
 
@@ -48,8 +52,10 @@ Please refer to the [implementation](https://github.com/FangyunWei/SLRT/blob/mai
 
 ```
 dataset=phoenix-2014t #phoenix14t / csl-daily
-python -m torch.distributed.launch --nproc_per_node 1 --use_env training.py \
-  --config experiments/configs/SingleStream/${dataset}_vs2t.yaml
+python -m torch.distributed.launch \
+--nproc_per_node 1 \
+--use_env training.py \
+--config experiments/configs/SingleStream/${dataset}_vs2t.yaml
 ```
 
 **Evaluate**
@@ -58,9 +64,35 @@ Upon finishing training, your can evaluate the model with:
 
 ```
 dataset=phoenix-2014t #phoenix14t / csl-daily
-python -m torch.distributed.launch --nproc_per_node 1 --use_env prediction.py  \
-  --config experiments/configs/SingleStream/${dataset}_vs2t.yaml
+python -m torch.distributed.launch \
+--nproc_per_node 1 \
+--use_env prediction.py  \
+--config experiments/configs/SingleStream/${dataset}_vs2t.yaml
 ```
 
-We will make our checkpoints publicly available after anonymous peer review process to evaluate our model, as it is not convenient to attach such large files.
+You can also reproduce our reported performance with our trained ckpts.
+
+- [PHOENIX14T]()  #TODO
+- [CSL-daily]()  #TODO
+
+We also provide a trained g2t ckpt of CSL-daily to help retrain our CV-SLT since the it is lost in the repo of MMTLB.
+
+- [csl_daily-g2t](), the blue scores are `35.24/34.70` on Dev/Test sets.
+
+## TODO
+
+- Clean and release the codes. &#x2714;
+- Prepared and release the pre-trained ckpt. &#x2716;
+
+## Citation
+
+```
+@InProceedings{
+    Zhao_2024_AAAI,
+    author    = {Rui Zhao, Liang Zhang, Biao Fu, Cong Hu, Jinsong Su, Yidong Chen},
+    title     = {Conditional Variational Autoencoder for Sign Language Translation with Cross-Modal Alignment},
+    booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+    year      = {2024},
+}
+```
 

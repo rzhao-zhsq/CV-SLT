@@ -10,12 +10,9 @@ data:
     dev: data/csl-daily/csl-daily.dev
     test: data/csl-daily/csl-daily.test
 
-#    dev_head_rgb_input:   data/csl-daily_s2g/extract_features/head_rgb_input/dev.pkl
-#    test_head_rgb_input:  data/csl-daily_s2g/extract_features/head_rgb_input/test.pkl
-#    train_head_rgb_input: data/csl-daily_s2g/extract_features/head_rgb_input/train.pkl
-    dev_head_rgb_input:   /home/rzhao/data/slt/tsn/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/dev.pkl
-    test_head_rgb_input:  /home/rzhao/data/slt/tsn/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/test.pkl
-    train_head_rgb_input: /home/rzhao/data/slt/tsn/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/train.pkl
+    dev_head_rgb_input:   experiments/outputs/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/dev.pkl
+    test_head_rgb_input:  experiments/outputs/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/test.pkl
+    train_head_rgb_input: experiments/outputs/SingleStream/csl-daily_s2g/extract_features/head_rgb_input/train.pkl
 
     level: char
     max_sent_length: 400
@@ -31,7 +28,7 @@ testing:
 training:
     batch_size: 16
     keep_last_ckpts: 2
-    model_dir: /home/rzhao/python/vtsnr/experiments/outputs/GridSearch/csl-daily_vs2t_kl3_postfix_dim64_residual_attention_1e-4_1e-4_5e-6_seed15*
+    model_dir: experiments/outputs/Variational/csl-daily_vs2t
     amp: True
     num_workers: 4
     optimization:
@@ -46,7 +43,7 @@ training:
         t_max: 40
         weight_decay: 0.001
     overwrite: true
-    random_seed: 0
+    random_seed: 15
     shuffle: true
     total_epoch: 40
     validation:
@@ -73,12 +70,11 @@ model:
         gloss_feature_ensemble: gloss_probabilities
         s3d:
             freeze_block: 1
-            pretrained_ckpt: /home/rzhao/pretrained_models/slt/s3ds_glosscls_ckpt
+            pretrained_ckpt: pretrained_models/s3ds_glosscls_ckpt
             use_block: 4
         visual_head:
             freeze: false
-#            pretrained_ckpt: pretrained_models/csl-daily_s2g/ckpts/best.ckpt
-            pretrained_ckpt: /home/rzhao/python/tsn/experiments/official_ckpt/SingleStream/csl-daily_s2g/ckpts/best.ckpt
+            pretrained_ckpt: experiments/outputs/SingleStream/csl-daily_s2g/ckpts/best.ckpt
             ff_kernelsize:
                 - 3
                 - 3
@@ -88,17 +84,13 @@ model:
             pe: true
     TranslationNetwork:
         GlossEmbedding:
-#            gloss2embed_file: pretrained_models/mBart_zh/gloss_embeddings.bin
-            gloss2embed_file: /home/rzhao/pretrained_models/slt/mBart_zh/gloss_embeddings.bin
+            gloss2embed_file: pretrained_models/mBart_zh/gloss_embeddings.bin
         GlossTokenizer:
-#            gloss2id_file: pretrained_models/mBart_zh/gloss2ids.pkl
-            gloss2id_file: /home/rzhao/pretrained_models/slt/mBart_zh/gloss2ids.pkl
+            gloss2id_file: pretrained_models/mBart_zh/gloss2ids.pkl
             src_lang: zh_CSL
         TextTokenizer:
-#            pretrained_model_name_or_path: pretrained_models/mBart_zh
-#            pruneids_file: pretrained_models/mBart_zh/old2new_vocab.pkl
-            pretrained_model_name_or_path: /home/rzhao/pretrained_models/slt/mBart_zh
-            pruneids_file: /home/rzhao/pretrained_models/slt/mBart_zh/old2new_vocab.pkl
+            pretrained_model_name_or_path: pretrained_models/mBart_zh
+            pruneids_file: pretrained_models/mBart_zh/old2new_vocab.pkl
             tgt_lang: zh_CN
         freeze_txt_embed: false
         label_smoothing: 0.2
@@ -106,8 +98,7 @@ model:
         overwrite_cfg:
             attention_dropout: 0.1
             dropout: 0.3
-        pretrained_model_name_or_path: /home/rzhao/pretrained_models/slt/mBart_zh
-        load_ckpt: /home/rzhao/python/tsn/experiments/outputs/SingleStream/csl-daily_g2t_best/ckpts/best.ckpt
+        pretrained_model_name_or_path: pretrained_models/mBart_zh
 
     VLMapper:
         freeze: false

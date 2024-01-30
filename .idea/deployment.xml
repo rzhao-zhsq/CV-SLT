@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="24_Titan" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="112_A40">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="24_Titan">
+        <serverdata>
+          <mappings>
+            <mapping deploy="python/CV-SLT" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="26_A40">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="48_3090">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
+  </component>
+</project>
