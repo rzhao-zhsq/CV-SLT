@@ -19,9 +19,9 @@ We propose CV-SLT to facilitate direct and sufficient cross-modal alignment betw
 
 ## Implementation
 
-- The implementation for the *prior path* and the *posterior path* is given in  `./modeling/translation`
+- The implementation for the *prior path* and the *posterior path* is given in  `./modeling/translation.py`
 
-- The Gaussian Network equipped with ARGD is given in `./modeling/gaussian_net`
+- The Gaussian Network equipped with shared ARGD is given in `./modeling/gaussian_net.py`
 
 ### Prerequisites 
 
@@ -39,7 +39,7 @@ The raw data are from:
 
 Please refer to the [implementation of MMTLB](https://github.com/FangyunWei/SLRT/blob/main/TwoStreamNetwork/docs/SingleStream-SLT.md)  for preparing the data and models, as CV-SLT simply focuses on the SLT training. Specifically, the required processed data and pre-trained models include:
 
-- Pre-extracted visual features for [PPHENIX14T](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EndgQUATcNRCj0pTKPNMA_kBxSE9iJSONqj1zq1kQAAn5g?e=BgbJCK) and [CSL-daily](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EjbL5fTAZbxOmGA5x7px8s8BbyJ4ml5e5TROB-GEWPXeBQ?e=Ks7GfH). Please download and place them under `./experiment`
+- Pre-extracted visual features for [PHENIX14T](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EndgQUATcNRCj0pTKPNMA_kBxSE9iJSONqj1zq1kQAAn5g?e=BgbJCK) and [CSL-daily](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EjbL5fTAZbxOmGA5x7px8s8BbyJ4ml5e5TROB-GEWPXeBQ?e=Ks7GfH). Please download and place them under `./experiment`
 - Pre-trained Visual Embedding (trained on s2g task) and mBart modules (trained on g2t task) following [MMTLB](https://hkustconnect-my.sharepoint.com/:f:/g/personal/rzuo_connect_ust_hk/EuJlnAhX7h9NnvFZhQH-_fcBtV8lbnj2CphiuidhhcU69w?e=eOsQ4B). Please download the corresponding directories and place them under `./pretrained_models` 
 
 > Note that the path is configured in the \*.yaml file and you can change it anywhere you want.
