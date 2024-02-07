@@ -44,7 +44,7 @@ Please refer to the [implementation of MMTLB](https://github.com/FangyunWei/SLRT
 
 > Note that the path is configured in the \*.yaml file and you can change it anywhere you want.
 >
-> We backup the ckpts used in this repo [here](). #TODO
+> We backup the ckpts used in this repo [here](https://1drv.ms/f/s!Alt7L3J6LlN7nQuEc33dZokyvArb?e=SQIvQX). 
 
 ### Train and Evaluate
 
@@ -72,17 +72,17 @@ python -m torch.distributed.launch \
 
 You can also reproduce our reported performance with our trained ckpts.
 
-- [PHOENIX14T]()  #TODO
-- [CSL-daily]()  #TODO
+- [phoenix-2014t_vs2t](https://1drv.ms/f/s!Alt7L3J6LlN7nQ3YlGmt4I8f9bIw?e=4knQU1)  
+- [csl-daily_vs2t](https://1drv.ms/f/s!Alt7L3J6LlN7nQ-k7S7e6LOl3Sll?e=x9gZEu)  
 
-We also provide a trained g2t ckpt of CSL-daily to help retrain our CV-SLT since the it is lost in the repo of MMTLB.
+We also provide a trained g2t ckpt of CSL-daily to help re-train our CV-SLT since it is lost in the repo of MMTLB.
 
-- [csl_daily-g2t](), the blue scores are `35.24/34.70` on Dev/Test sets.
+- [csl-daily_g2t](https://1drv.ms/f/s!Alt7L3J6LlN7nRHnpATRKLTFMMXN?e=rpa2CB), the blue scores are `35.24/34.70` on Dev/Test sets.
 
 ## TODO
 
 - Clean and release the codes. &#x2714;
-- Prepared and release the pre-trained ckpt. &#x2716;
+- Prepare and release the pre-trained ckpts. &#x2714;
 
 ## Citation
 
