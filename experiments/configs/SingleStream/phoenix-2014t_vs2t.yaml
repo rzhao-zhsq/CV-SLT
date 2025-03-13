@@ -105,7 +105,7 @@ model:
             max_length: 100
             num_beams: 5
         pretrained_model_name_or_path: pretrained_models/mBart_de
-
+        load_ckpt: experiments/outputs/SingleStream/phoenix-2014t_g2t/ckpts/best.ckpt
 
     VLMapper:
         freeze: false
