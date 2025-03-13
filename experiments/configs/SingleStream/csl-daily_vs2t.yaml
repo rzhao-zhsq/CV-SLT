@@ -99,6 +99,7 @@ model:
             attention_dropout: 0.1
             dropout: 0.3
         pretrained_model_name_or_path: pretrained_models/mBart_zh
+        load_ckpt: experiments/outputs/SingleStream/csl-daily_g2t/ckpts/best.ckpt
 
     VLMapper:
         freeze: false
